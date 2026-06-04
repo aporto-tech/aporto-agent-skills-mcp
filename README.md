@@ -38,3 +38,50 @@ Discovery and embeddings live on Aporto servers. This package does not store the
 full catalog, does not compute embeddings, and does not load every skill into
 model context.
 
+## Add To An MCP Client
+
+Use the hosted Aporto MCP endpoint:
+
+```bash
+export APORTO_API_KEY="sk-live-..."
+```
+
+```json
+{
+  "mcpServers": {
+    "aporto": {
+      "url": "https://app.aporto.tech/api/mcp",
+      "headers": {
+        "Authorization": "Bearer ${APORTO_API_KEY}"
+      }
+    }
+  }
+}
+```
+
+Codex CLI example:
+
+```bash
+APORTO_API_KEY="sk-live-..." codex mcp add aporto \
+  --url https://app.aporto.tech/api/mcp \
+  --bearer-token-env-var APORTO_API_KEY
+```
+
+Hermes should use the same remote MCP URL and bearer token. If Hermes expects a
+JSON config, add the `mcpServers.aporto` block above.
+
+## Direct API
+
+MCP is optional. The same workflow works over HTTP:
+
+```bash
+curl https://app.aporto.tech/api/agent-skills/discover \
+  -H "Authorization: Bearer $APORTO_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"intent":"review this pull request before merge","limit":5}'
+```
+
+```bash
+curl https://app.aporto.tech/api/agent-skills/gstack-review \
+  -H "Authorization: Bearer $APORTO_API_KEY"
+```
